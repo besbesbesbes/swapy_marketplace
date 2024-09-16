@@ -10,4 +10,6 @@ const data_assets = data_assets_temp.map(el => {
     }
 })
 
+console.log(data_assets)
+
 export { data_assets }
