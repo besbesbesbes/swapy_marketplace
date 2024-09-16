@@ -65,14 +65,12 @@ Swapy is an eCommerce-like platform but focuses on the concept of swapping asset
 
 ### 4.2 Security
 - **NFR3**: All sensitive data (passwords, personal info) must be encrypted.
-- **NFR4**: The system must implement secure authentication protocols.
   
 ### 4.3 Usability
-- **NFR5**: The user interface should be intuitive and responsive, with support for both desktop and mobile devices.
+- **NFR4**: The user interface should be intuitive and responsive, with support for desktop (mobile devices is optional).
   
 ### 4.4 Reliability
-- **NFR6**: The system should have 99.9% uptime.
-- **NFR7**: In the event of a failure, the system should recover all user data without data loss.
+- **NFR5**: In the event of a failure, the system should recover all user data without data loss.
 
 ## 5. System Architecture
 
