@@ -24,7 +24,7 @@ export default function OfferMessage() {
                             <p className="bg-my-bg-card border border-my-acct py-1 px-2 rounded-xl w-fit shadow-md">Offeror create new offer "#1234". <span className="font-bold italic">[Auto]</span></p>
                         </div>
                         <div className="w-fit flex items-end gap-1">
-                            <p className="bg-my-bg-card border border-my-prim py-1 px-2 rounded-xl w-fit shadow-md">Can you add more assets? I think just Eggs and Dog Food is not enough. <span className="font-bold italic">[Auto]</span></p>
+                            <p className="bg-my-bg-card border border-my-prim py-1 px-2 rounded-xl w-fit shadow-md">Can you add more assets? I think just Eggs and Dog Food is not enough.</p>
                             <p className="text-my-prim text-xs">14-9 10:20am</p>
                         </div>
                         <div className="w-fit flex items-end gap-1 self-end">

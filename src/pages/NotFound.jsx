@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { TbFaceIdError } from "react-icons/tb";
 import { useNavigate } from 'react-router-dom'
+import useStore from "../store/main-store";
 
 export default function NotFound() {
     const navigate = useNavigate()
-    const [sec, setSec] = useState(7)
+    const [sec, setSec] = useState(5)
+
     useEffect(() => {
         if (sec === 0) {
             navigate(`/`); // Redirect when seconds hit 0

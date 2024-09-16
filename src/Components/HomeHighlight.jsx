@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { data_dummy } from './testData'
+import { data_dummy } from '../data/testData'
 import ShowAsset from './ShowAsset'
 const assets = data_dummy.assets
 

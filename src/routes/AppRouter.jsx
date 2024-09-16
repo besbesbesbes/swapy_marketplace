@@ -21,6 +21,7 @@ const appRouter = createBrowserRouter([
             { path: '/assets', element: <Assets /> },
             { path: '/shipping', element: <Shipping /> },
             { path: '/offer', element: <Offer /> },
+            { path: '/notfound', element: <NotFound /> },
             { path: '*', element: <NotFound /> },
         ]
     }])

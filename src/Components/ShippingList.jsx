@@ -1,4 +1,4 @@
-import { data_dummy } from './testData'
+import { data_dummy } from '../data/testData'
 import React, { useState } from 'react'
 import ShowAsset from './ShowAsset'
 import ShowOffer from './ShowOffer'

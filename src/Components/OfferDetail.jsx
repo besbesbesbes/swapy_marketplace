@@ -1,4 +1,4 @@
-import { data_dummy } from './testData'
+import { data_dummy } from '../data/testData'
 import ShowAsset from "./ShowAsset";
 import { useState } from "react";
 import { IoIosAddCircle } from "react-icons/io";

@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { RiSwap2Line } from "react-icons/ri"
 import { FaSearch, FaUser, FaBoxOpen } from "react-icons/fa"
 import { MdLocalShipping, MdLocalOffer } from "react-icons/md"
-import { BiSolidLogInCircle } from "react-icons/bi"
-import { FaPhone } from "react-icons/fa";
+import { FaPhone, FaArrowAltCircleRight, FaArrowAltCircleLeft } from "react-icons/fa";
 import ShowLogin from './ShowLogin'
 import ShowContactUs from './ShowContactUs'
+import useAppStore from "../store/main-store"
 const Header = () => {
+    const navigate = useNavigate()
     const location = useLocation()
     const [ctrlShowLogin, setCtrlShowLogin] = useState({ visibility: "invisible", opacity: 0 })
     const [ctrlShowContactUs, setCtrlShowContactUs] = useState({ visibility: "invisible", opacity: 0 })
@@ -17,6 +18,14 @@ const Header = () => {
     }
     const hdlShowContactUs = () => {
         setCtrlShowContactUs({ visibility: 'visible', opacity: 100 })
+    }
+    const { user, setUser } = useAppStore((state) => ({
+        user: state.user,
+        setUser: state.setUser,
+    }))
+    const hdlLogout = () => {
+        setUser({})
+        navigate('/')
     }
     return (
         <div className='w-full text-my-text font-extralight'>
@@ -36,9 +45,17 @@ const Header = () => {
                     <div className='flex justify-end gap-1 text-my-text'>
                         <button className='px-2 flex gap-1'
                             onClick={() => hdlShowContactUs()}><FaPhone />Contact us</button>
-                        <button className='px-2 flex gap-1'
-                            onClick={() => hdlShowLogin()}
-                        ><BiSolidLogInCircle />Login</button>
+                        {Object.keys(user).length > 0
+                            ? <div className='flex'>
+                                <button className='px-2 flex gap-1'
+                                    onClick={() => hdlLogout()}
+                                ><FaArrowAltCircleLeft className="translate-y-[2px]" />Logout</button>
+                                <p>Welcome, <span className='font-bold'>{user.user_name}</span></p>
+                            </div>
+                            : <button className='px-2 flex gap-1'
+                                onClick={() => hdlShowLogin()}
+                            ><FaArrowAltCircleRight className="translate-y-[2px]" />Login</button>
+                        }
                     </div>
                 </div>
                 <div className='flex justify-between items-end gap-20'>
@@ -48,12 +65,14 @@ const Header = () => {
                         <button className='py-1 px-2 bg-my-acct flex justify-center items-center gap-1 hover:bg-my-btn-hover'> <FaSearch />Search</button>
                     </div>
                     {/* main menu */}
-                    <div className='flex gap-2 flex-wrap'>
-                        <button className={`py-1 px-2 ${location.pathname == '/offer' ? 'bg-my-acct' : ''}`}><Link to='/offer' className='flex gap-1 items-baseline'><MdLocalOffer />Offer</Link></button>
-                        <button className={`py-1 px-2 ${location.pathname == '/shipping' ? 'bg-my-acct' : ''}`}><Link to='/shipping' className='flex gap-1 items-baseline'><MdLocalShipping />Shipping</Link></button>
-                        <button className={`py-1 px-2 ${location.pathname == '/assets' ? 'bg-my-acct' : ''}`}><Link to='/assets' className='flex gap-1 items-baseline'><FaBoxOpen />Assets</Link></button>
-                        <button className={`py-1 px-2 ${location.pathname == '/userinfo' ? 'bg-my-acct' : ''}`}><Link to='/userinfo' className='flex gap-1 items-baseline'><FaUser />User Info</Link></button>
-                    </div>
+                    {Object.keys(user).length > 0 &&
+                        <div className='flex gap-2 flex-wrap'>
+                            <button className={`py-1 px-2 ${location.pathname == '/offer' ? 'bg-my-acct' : ''}`}><Link to='/offer' className='flex gap-1 items-baseline'><MdLocalOffer />Offer</Link></button>
+                            <button className={`py-1 px-2 ${location.pathname == '/shipping' ? 'bg-my-acct' : ''}`}><Link to='/shipping' className='flex gap-1 items-baseline'><MdLocalShipping />Shipping</Link></button>
+                            <button className={`py-1 px-2 ${location.pathname == '/assets' ? 'bg-my-acct' : ''}`}><Link to='/assets' className='flex gap-1 items-baseline'><FaBoxOpen />Assets</Link></button>
+                            <button className={`py-1 px-2 ${location.pathname == '/userinfo' ? 'bg-my-acct' : ''}`}><Link to='/userinfo' className='flex gap-1 items-baseline'><FaUser />User Info</Link></button>
+                        </div>
+                    }
                 </div>
             </div>
             {/* underline menu */}

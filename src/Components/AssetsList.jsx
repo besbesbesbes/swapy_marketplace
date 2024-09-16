@@ -1,7 +1,7 @@
 import { IoIosAddCircle } from "react-icons/io";
 import { AiFillEdit } from "react-icons/ai";
 import { RiDeleteBin5Fill } from "react-icons/ri";
-import { data_dummy } from './testData'
+import { data_dummy } from '../data/testData'
 import ShowAsset from "./ShowAsset";
 import { useState } from "react";
 const assets = data_dummy.assets
