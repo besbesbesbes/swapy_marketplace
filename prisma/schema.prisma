@@ -1,0 +1,109 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  userId          Int       @id @default(autoincrement()) @map("user_id")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  userName        String    @unique @map("user_name")
+  userDisplayName String?   @map("user_display_name")
+  userEmail       String    @unique @map("user_email")
+  userPassword    String    @map("user_password")
+  userBio         String?   @map("user_bio")
+  userProfilePic  String?   @map("user_profile_pic")
+  userRating      Decimal   @default(0) @map("user_rating")
+  userRatingCount Int       @default(0) @map("user_rating_count")
+  userLocation    String?   @map("user_location")
+  userAddress     String?   @map("user_address")
+  userIsReady     Boolean   @default(false) @map("user_is_ready")
+  // Relations
+  assets          Assets[]
+  offersAsOfferor Offers[]  @relation("OffersAsOfferor")
+  offersAsSwaper  Offers[]  @relation("OffersAsSwaper")
+  Message         Message[]
+}
+
+model Assets {
+  assetId              Int          @id @default(autoincrement()) @map("asset_id")
+  createdAt            DateTime     @default(now()) @map("created_at")
+  updatedAt            DateTime     @updatedAt @map("updated_at")
+  user                 Users        @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  userId               Int          @map("user_id")
+  assetName            String       @map("asset_name")
+  assetCategory        String       @map("asset_category")
+  assetBrand           String?      @map("asset_brand")
+  assetCondition       String       @map("asset_condition")
+  assetNote            String?      @map("asset_note") @db.VarChar(1000)
+  assetThumbnail       String       @map("asset_thumbnail")
+  assetStatus          String       @default("ready") @map("asset_status")
+  assetOfferorCount    Int          @default(0) @map("asset_offeror_count")
+  assetSwaperCount     Int          @default(0) @map("asset_swaper_count")
+  assetIsReady         Boolean      @default(true) @map("asset_is_ready")
+  assetShippingAddress String?      @map("asset_shipping_address")
+  AssetPic             AssetPic[]
+  OfferAsset           OfferAsset[]
+}
+
+model AssetPic {
+  assetPicId Int      @id @default(autoincrement()) @map("asset_pic_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  assetPic   String   @map("asset_pic") @db.VarChar(1000)
+  asset      Assets   @relation(fields: [assetId], references: [assetId], onDelete: Cascade)
+  assetId    Int      @map("asset_id")
+
+  @@map("Asset_Pic")
+}
+
+model Offers {
+  offerId     Int          @id @default(autoincrement()) @map("offer_id")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  offerName   String       @map("offer_name")
+  offerStatus String       @map("offer_status")
+  // Relations
+  offeror     Users        @relation("OffersAsOfferor", fields: [offerorId], references: [userId], onDelete: Cascade)
+  offerorId   Int          @map("offeror_id")
+  swaper      Users        @relation("OffersAsSwaper", fields: [swaperId], references: [userId], onDelete: Cascade)
+  swaperId    Int          @map("swaper_id")
+  OfferAsset  OfferAsset[]
+  Message     Message[]
+}
+
+model OfferAsset {
+  offerAssetId Int      @id @default(autoincrement()) @map("offer_asset_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  // Relations
+  offer        Offers   @relation(fields: [offerId], references: [offerId], onDelete: Cascade)
+  offerId      Int      @map("offer_id")
+  asset        Assets   @relation(fields: [assetId], references: [assetId], onDelete: Cascade)
+  assetId      Int      @map("asset_id")
+
+  @@map("Offer_asset")
+}
+
+model Message {
+  messageId     Int      @id @default(autoincrement()) @map("message_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  messageTxt    String   @map("message_txt")
+  messageIsAuto Boolean  @map("message_is_auto")
+  //Relation
+  user          Users    @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  userId        Int      @map("user_id")
+  offer         Offers   @relation(fields: [offerId], references: [offerId], onDelete: Cascade)
+  offerId       Int      @map("offer_id")
+}
