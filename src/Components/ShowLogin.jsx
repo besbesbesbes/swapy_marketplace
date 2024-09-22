@@ -1,12 +1,17 @@
 import { IoIosClose } from "react-icons/io";
 import { FcGoogle } from "react-icons/fc";
 import { useEffect, useState } from "react";
-import { data_users } from "../data/data_users";
-import useAppStore from "../store/main-store"
+// import { data_users } from "../data/data_users";
+import useAppStore from "../store/main-store";
+import axios from "axios";
 
 export default function ShowLogin({ ctrlShowLogin, setCtrlShowLogin }) {
     const { visibility, opacity } = ctrlShowLogin;
     const [loginErr, setLoginErr] = useState(false)
+    const { token, setToken } = useAppStore(state => ({
+        token: state.token,
+        setToken: state.setToken,
+    }))
     const { user, setUser } = useAppStore((state) => ({
         user: state.user,
         setUser: state.setUser,
@@ -18,19 +23,23 @@ export default function ShowLogin({ ctrlShowLogin, setCtrlShowLogin }) {
     const hdlInput = e => {
         setInput(prv => ({ ...prv, [e.target.name]: e.target.value }))
     }
-    const hdlLogin = e => {
+    const hdlLogin = async (e) => {
         e.preventDefault()
-        // find on db
-        let new_inputUser = data_users.find(el => el.user_name.toLowerCase() == input.inputUser.toLowerCase() && el.user_password == input.inputPass)
-        if (new_inputUser) {
-            // user correct
-            setUser(new_inputUser)
-            setInput(prv => ({ inputUser: "", inputPass: "" }))
-            setCtrlShowLogin({ visibility: 'invisible', opcity: 0 })
-        } else {
-            // user incorrect
-            setUser({})
+        try {
+            const resp = await axios.post("http://localhost:8000/auth/login", {
+                name: input.inputUser,
+                password: input.inputPass
+            })
+            if (resp.data.token) {
+                console.log(resp.data.token)
+                setToken(resp.data.token)
+                setUser(resp.data.returnUser)
+                setInput(prv => ({ inputUser: "", inputPass: "" }))
+                setCtrlShowLogin({ visibility: 'invisible', opcity: 0 })
+            }
+        } catch (err) {
             setLoginErr(true)
+            console.log(err.message)
         }
     }
     useEffect(() => {

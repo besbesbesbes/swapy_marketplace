@@ -13,7 +13,9 @@ export default function HomeSearch() {
     }
     const [searchParams] = useSearchParams()
     const getAllAssets = async () => {
-        const result = await axios.get("http://localhost:8000/search?c=" + searchParams.get("c"))
+        let result
+        searchParams.get("c") ? result = await axios.get("http://localhost:8000/search?c=" + searchParams.get("c")) : null
+        searchParams.get("v") ? result = await axios.get("http://localhost:8000/search?v=" + searchParams.get("v")) : null
         setAssets(result.data.assets)
     }
     useEffect(() => {
@@ -33,7 +35,8 @@ export default function HomeSearch() {
                 </Link>
 
                 <span className='px-4'>|</span>
-                <p>{searchParams.get("c").charAt(0).toUpperCase() + searchParams.get("c").slice(1)}</p>
+                {searchParams.get("c") && <p>{searchParams.get("c").charAt(0).toUpperCase() + searchParams.get("c").slice(1)}</p>}
+                {searchParams.get("v") && <p>search:{searchParams.get("v")}</p>}
             </div>
             <div className='w-full bg-my-bg-main flex justify-evenly items-center p-4 flex-wrap gap-4 i'>
                 {assets.map((el, idx) => {

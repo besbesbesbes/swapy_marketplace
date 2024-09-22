@@ -13,6 +13,7 @@ const Header = () => {
     const location = useLocation()
     const [ctrlShowLogin, setCtrlShowLogin] = useState({ visibility: "invisible", opacity: 0 })
     const [ctrlShowContactUs, setCtrlShowContactUs] = useState({ visibility: "invisible", opacity: 0 })
+    const [input, setInput] = useState("")
     const hdlShowLogin = () => {
         setCtrlShowLogin({ visibility: 'visible', opacity: 100 })
     }
@@ -23,9 +24,19 @@ const Header = () => {
         user: state.user,
         setUser: state.setUser,
     }))
+    const { token, setToken } = useAppStore(state => ({
+        token: state.token,
+        setToken: state.setToken,
+    }))
     const hdlLogout = () => {
+        setToken("")
         setUser({})
         navigate('/')
+    }
+    const hdlSubmitSearch = (e) => {
+        e.preventDefault()
+        navigate("/search?v=" + input)
+        setInput("")
     }
     return (
         <div className='w-full text-my-text font-extralight'>
@@ -43,14 +54,15 @@ const Header = () => {
                     </Link>
                     {/* menu login contact */}
                     <div className='flex justify-end gap-1 text-my-text'>
+                        {/* <button onClick={() => console.log(user)}>Test</button> */}
                         <button className='px-2 flex gap-1'
                             onClick={() => hdlShowContactUs()}><FaPhone />Contact us</button>
-                        {Object.keys(user).length > 0
+                        {Object.keys(token).length > 0
                             ? <div className='flex'>
                                 <button className='px-2 flex gap-1'
                                     onClick={() => hdlLogout()}
                                 ><FaArrowAltCircleLeft className="translate-y-[2px]" />Logout</button>
-                                <p>Welcome, <span className='font-bold'>{user.user_name}</span></p>
+                                <p>Welcome, <span className='font-bold'>{user.userName}</span></p>
                             </div>
                             : <button className='px-2 flex gap-1'
                                 onClick={() => hdlShowLogin()}
@@ -60,12 +72,15 @@ const Header = () => {
                 </div>
                 <div className='flex justify-between items-end gap-20'>
                     {/* search input */}
-                    <div className='flex border border-my-text p-1 flex-1 bg-my-text  max-w-[600px] mb-2'>
-                        <input type="text" className='flex-1 text-my-prim px-2 bg-my-text' />
+                    <form className='flex border border-my-text p-1 flex-1 bg-my-text  max-w-[600px] mb-2'
+                        onSubmit={hdlSubmitSearch}>
+                        <input type="text" className='flex-1 text-my-prim px-2 bg-my-text'
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)} />
                         <button className='py-1 px-2 bg-my-acct flex justify-center items-center gap-1 hover:bg-my-btn-hover'> <FaSearch />Search</button>
-                    </div>
+                    </form>
                     {/* main menu */}
-                    {Object.keys(user).length > 0 &&
+                    {Object.keys(token).length > 0 &&
                         <div className='flex gap-2 flex-wrap'>
                             <button className={`py-1 px-2 ${location.pathname == '/offer' ? 'bg-my-acct' : ''}`}><Link to='/offer' className='flex gap-1 items-baseline'><MdLocalOffer />Offer</Link></button>
                             <button className={`py-1 px-2 ${location.pathname == '/shipping' ? 'bg-my-acct' : ''}`}><Link to='/shipping' className='flex gap-1 items-baseline'><MdLocalShipping />Shipping</Link></button>

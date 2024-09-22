@@ -12,7 +12,7 @@ const HomeAssets = () => {
     const getAllAssets = async () => {
         const result = await axios.get("http://localhost:8000/search/all")
         setAssets(result.data.assets)
-        console.log(assets)
+        // console.log(assets)
     }
     useEffect(() => {
         getAllAssets()

@@ -89,7 +89,18 @@ export const login = async (req, res, next) => {
     const token = jwt.sign({ id: user.userId }, process.env.JWT_SECRET, {
       expiresIn: "30d",
     });
-    res.json({ token });
+    //return user
+    const returnUser = await prisma.users.findFirst({
+      where: {
+        userId: user.userId,
+      },
+      select: {
+        userId: true,
+        userName: true,
+        userIsReady: true,
+      },
+    });
+    res.json({ token, returnUser });
   } catch (err) {
     next(err);
   }

@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import { MdLocalOffer } from "react-icons/md"
 import axios from "axios"
+import useAppStore from "../store/main-store";
 
 export default function ShowAsset({ ctrlShowAsset, setCtrlShowAsset, selectedAsset, setSelectedAsset }) {
     // console.log(selectedAsset)
     const [selectedPic, setSelectedPic] = useState(0)
     const { visibility, opacity } = ctrlShowAsset;
     const [assets, setAssets] = useState([])
+    const { user } = useAppStore(state => ({
+        user: state.user
+    }))
     const hdlClosePopup = e => {
         e.stopPropagation()
         setCtrlShowAsset({ visibility: 'invisible', opcity: 0 })
@@ -35,6 +39,7 @@ export default function ShowAsset({ ctrlShowAsset, setCtrlShowAsset, selectedAss
             {/* card */}
             <div className="w-6/12 min-h-[500px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col p-10"
                 onClick={e => { e.stopPropagation() }}>
+                {/* <button onClick={() => console.log(user)}>Test</button> */}
                 <div className="flex w-full h-[400px]">
                     {/* picture */}
                     <div className="w-6/12 h-full flex flex-col p-5">
@@ -59,26 +64,28 @@ export default function ShowAsset({ ctrlShowAsset, setCtrlShowAsset, selectedAss
                         <div className="w-full h-[100px]  flex justify-between">
                             {/* profile pic */}
                             <div className="w-4/12 rounded-full ">
-                                <img className='w-full h-full object-contain' src="/src/pics/user.png" alt="no load" />
+                                <img className='w-[100px] h-[100px] object-cover' src={assets?.user?.userProfilePic} alt="no load" />
                             </div>
                             {/* profile detail */}
                             <div className=" flex-1 p-1 flex flex-col justify-around">
                                 <div className=" flex">
                                     <p className="w-5/12 font-bold">Swaper :</p>
-                                    <p className="flex-1">Joh***e</p>
+                                    <p className="flex-1">{assets?.user?.userDisplayName}</p>
                                 </div>
                                 <div className=" flex">
                                     <p className="w-5/12 font-bold">Ship from :</p>
-                                    <p className="flex-1">Bangkok, Thailand</p>
+                                    <p className="flex-1">{assets?.user?.userLocation}</p>
                                 </div>
                                 <div className=" flex items-center flex-wrap">
                                     <p className="w-5/12 font-bold">Rating :</p>
                                     <div className='flex gap-1 items-baseline'>
-                                        <div className='w-[10px] h-[10px] rounded-full bg-my-acct'></div>
-                                        <div className='w-[10px] h-[10px] rounded-full bg-my-acct'></div>
-                                        <div className='w-[10px] h-[10px] rounded-full bg-my-acct'></div>
-                                        <div className='w-[10px] h-[10px] rounded-full bg-my-acct'></div>
-                                        <p className='text-xs'>{`(4.2 / 5)`}</p>
+                                        {/* user rating */}
+                                        <div className='flex gap-[2px]'>
+                                            {Array(Math.round(assets?.user?.userRating || 0)).fill().map((el, idx) => (
+                                                <div key={idx} className='w-[10px] h-[10px] rounded-full bg-my-acct'></div>
+                                            ))}
+                                        </div>
+                                        <p className='text-xs'>{`(${assets?.user?.userRating}/ ${assets?.user?.userRatingCount})`}</p>
                                     </div>
                                 </div>
                             </div>
@@ -106,9 +113,10 @@ export default function ShowAsset({ ctrlShowAsset, setCtrlShowAsset, selectedAss
                     </div>
                 </div>
                 {/* button */}
-                <div className="flex justify-center items-center mt-2">
-                    <button className='h-[40px] py-1 w-[200px] mx-auto shadow-md bg-my-acct font-bold text-my-text flex justify-center items-center gap-1 hover:bg-my-btn-hover'><MdLocalOffer className="-translate-y-[1px]" />Make New Offer</button>
-                </div>
+                {Object.keys(user).length > 0 && user.userIsReady &&
+                    <div className="flex justify-center items-center mt-2">
+                        <button className='h-[40px] py-1 w-[200px] mx-auto shadow-md bg-my-acct font-bold text-my-text flex justify-center items-center gap-1 hover:bg-my-btn-hover'><MdLocalOffer className="-translate-y-[1px]" />Make New Offer</button>
+                    </div>}
                 {/* close button */}
                 <button className='w-[50px] h-[50px] bg-my-acct text-my-text rounded-full text-4xl font-bold absolute flex justify-center items-center top-0 right-0 translate-x-4 -translate-y-4 shadow-md hover:bg-my-btn-hover'
                     onClick={hdlClosePopup}><IoIosClose /></button>
