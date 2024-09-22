@@ -2,7 +2,7 @@ import createError from "../utils/create-error.js";
 import prisma from "../config/prisma.js";
 export const searchBy = async (req, res, next) => {
   try {
-    const { v, c, i } = req.query;
+    const { v, c, i, a } = req.query;
     const assets = await prisma.assets.findMany({
       where: {
         assetName: {
@@ -10,6 +10,7 @@ export const searchBy = async (req, res, next) => {
         },
         assetCategory: c || undefined,
         userId: i ? Number(i) : undefined,
+        assetId: a ? Number(a) : undefined,
         assetIsReady: true,
         user: {
           userIsReady: true,

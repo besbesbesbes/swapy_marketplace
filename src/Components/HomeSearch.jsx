@@ -17,6 +17,7 @@ export default function HomeSearch() {
         setAssets(result.data.assets)
     }
     useEffect(() => {
+        setAssets([])
         getAllAssets()
     }, [searchParams])
     return (
