@@ -45,7 +45,7 @@ export default function HomeSearch() {
                             onClick={e => { hdlShowAssets(el) }}>
                             {/* asset pic */}
                             <div className='h-[150px]'>
-                                <img className='h-[150px]' src={el.assetThumbnail} alt="no load" />
+                                <img className='h-[150px] object-contain' src={el.assetThumbnail} alt="no load" />
                             </div>
                             {/* asset name */}
                             <div className='w-full h-[20px]'>

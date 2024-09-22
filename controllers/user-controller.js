@@ -1,5 +1,6 @@
 import createError from "../utils/create-error.js";
 import prisma from "../config/prisma.js";
+import { register } from "./auth-controller.js";
 export const userInfo = async (req, res, next) => {
   try {
     const user = req.user;
@@ -31,6 +32,9 @@ export const updateUserInfo = async (req, res, next) => {
         return next(createError(400, `${field.name} must be a string`));
       }
     }
+    if (userDisplayName.length < 6) {
+      return createError(400, "Display name at least 6 charactors.");
+    }
 
     const user = await prisma.users.findFirst({
       where: {
@@ -56,10 +60,15 @@ export const updateUserInfo = async (req, res, next) => {
     //check user ready
     if (
       updatedUser.userDisplayName !== null &&
+      updatedUser.userDisplayName !== "" &&
       updatedUser.userBio !== null &&
+      updatedUser.userBio !== "" &&
       updatedUser.userProfilePic !== null &&
+      updatedUser.userProfilePic !== "" &&
       updatedUser.userLocation !== null &&
-      updatedUser.userAddress !== null
+      updatedUser.userLocation !== "" &&
+      updatedUser.userAddress !== null &&
+      updatedUser.userAddress
     ) {
       await prisma.users.update({
         where: {
@@ -67,6 +76,15 @@ export const updateUserInfo = async (req, res, next) => {
         },
         data: {
           userIsReady: true,
+        },
+      });
+    } else {
+      await prisma.users.update({
+        where: {
+          userId: updatedUser.userId,
+        },
+        data: {
+          userIsReady: false,
         },
       });
     }
@@ -77,7 +95,7 @@ export const updateUserInfo = async (req, res, next) => {
       },
     });
 
-    res.json({ user: returnUser });
+    res.json({ user: returnUser, message: "User updating" });
   } catch (err) {
     next(err);
   }
