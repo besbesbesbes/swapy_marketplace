@@ -7,6 +7,7 @@ import Assets from '../pages/Assets'
 import Shipping from '../pages/Shipping'
 import NotFound from '../pages/NotFound'
 import Offer from '../pages/Offer'
+import Search from '../pages/Search'
 const appRouter = createBrowserRouter([
     {
         path: "/",
@@ -22,6 +23,7 @@ const appRouter = createBrowserRouter([
             { path: '/shipping', element: <Shipping /> },
             { path: '/offer', element: <Offer /> },
             { path: '/notfound', element: <NotFound /> },
+            { path: '/search', element: <Search /> },
             { path: '*', element: <NotFound /> },
         ]
     }])

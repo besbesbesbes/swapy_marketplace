@@ -51,6 +51,7 @@ model Assets {
   assetOfferorCount    Int          @default(0) @map("asset_offeror_count")
   assetSwaperCount     Int          @default(0) @map("asset_swaper_count")
   assetIsReady         Boolean      @default(true) @map("asset_is_ready")
+  assetIsNew           Boolean      @default(true) @map("asset_is_new")
   assetShippingAddress String?      @map("asset_shipping_address")
   AssetPic             AssetPic[]
   OfferAsset           OfferAsset[]

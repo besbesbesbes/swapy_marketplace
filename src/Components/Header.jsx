@@ -35,7 +35,7 @@ const Header = () => {
                     <Link to='/'>
                         <div className='flex items-end gap-2 mt-3 cursor-pointer'>
                             <div className='flex justify-center items-center -translate-y-1'>
-                                <p className=' w-[35px] h-[35px] text-center text-xl font-bold rounded-full p-1 text-my-text bg-my-acct flex justify-center items-center' to='/'><RiSwap2Line className='text-white text-2xl' /></p>
+                                <p className=' w-[35px] h-[35px] text-center text-xl font-bold p-1 text-my-text bg-my-acct flex justify-center items-center border-2' to='/'><RiSwap2Line className='text-white text-4xl' /></p>
                             </div>
                             <p className='text-lg font-bold font-serif mr-2'>Swapy</p>
                             <p className='text-xs mb-1'> | Swap, Save, Share - The P2P Marketplace for Everyone...</p>

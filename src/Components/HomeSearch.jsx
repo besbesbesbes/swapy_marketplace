@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import ShowAsset from './ShowAsset'
 import axios from "axios"
-const HomeAssets = () => {
+import { IoHomeSharp } from "react-icons/io5";
+export default function HomeSearch() {
     const [ctrlShowAsset, setCtrlShowAsset] = useState({ visibility: "invisible", opacity: 0 })
     const [selectedAsset, setSelectedAsset] = useState({})
     const [assets, setAssets] = useState([])
@@ -9,28 +11,30 @@ const HomeAssets = () => {
         setSelectedAsset(el)
         setCtrlShowAsset({ visibility: 'visible', opacity: 100 })
     }
+    const [searchParams] = useSearchParams()
     const getAllAssets = async () => {
-        const result = await axios.get("http://localhost:8000/search/all")
+        const result = await axios.get("http://localhost:8000/search?c=" + searchParams.get("c"))
         setAssets(result.data.assets)
-        console.log(assets)
     }
     useEffect(() => {
         getAllAssets()
-    }, [])
+    }, [searchParams])
     return (
         <div>
-            {/* <button onClick={()=>{console.log(assets)}}>Test</button> */}
-            <div className='w-full bg-my-bg-main flex justify-evenly items-center p-4 flex-wrap gap-4 i'>
-                {/* create your asset */}
-                {/* <div className='w-[170px] h-[220px] shadow-md flex flex-col items-center gap-2 overflow-hidden hover:bg-my-hover  cursor-pointer'>
-                    <div className='w-full h-full p-4 bg-my-hover'>
-                        <div className=' w-full h-full border inset-0 bg-my-bg-card flex justify-center items-center flex-col gap-2'>
-                            <p className='w-[50px] h-[50px] flex justify-center items-center text-3xl bg-my-acct p-3 rounded-full font-bold text-my-text'>+</p>
-                            <p className='font-bold text-xs'>Create Your Asset</p>
-                        </div>
+            {/* header */}
+            {/* <button onClick={() => console.log(cat)}>Test</button> */}
+            <div className='flex text-xl w-full bg-my-bg-card px-5 py-1 '>
+                <Link to='/'>
+                    <div className='flex items-center gap-1'>
+                        <IoHomeSharp className='-translate-y-[1px]' />
+                        <p className='font-bold'>Home</p>
                     </div>
-                </div> */}
-                {/* asset list area */}
+                </Link>
+
+                <span className='px-4'>|</span>
+                <p>{searchParams.get("c").charAt(0).toUpperCase() + searchParams.get("c").slice(1)}</p>
+            </div>
+            <div className='w-full bg-my-bg-main flex justify-evenly items-center p-4 flex-wrap gap-4 i'>
                 {assets.map((el, idx) => {
                     return (
                         <div key={idx} className='bg-my-bg-card w-[170px] h-[230px] shadow-md flex flex-col items-center gap-2 overflow-hidden p-2 hover:bg-my-hover  cursor-pointer relative'
@@ -68,5 +72,3 @@ const HomeAssets = () => {
         </div >
     )
 }
-
-export default HomeAssets
