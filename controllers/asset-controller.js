@@ -1,5 +1,19 @@
 import createError from "../utils/create-error.js";
 import prisma from "../config/prisma.js";
+export const getAsset = async (req, res, next) => {
+  try {
+    const user = req.user;
+    //find assets
+    const assets = await prisma.assets.findMany({
+      where: {
+        userId: user.userId,
+      },
+    });
+    res.json({ assets });
+  } catch (err) {
+    next(err);
+  }
+};
 export const createAsset = async (req, res, next) => {
   try {
     const user = req.user;

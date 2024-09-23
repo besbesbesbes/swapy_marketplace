@@ -113,9 +113,13 @@ export default function ShowAsset({ ctrlShowAsset, setCtrlShowAsset, selectedAss
                     </div>
                 </div>
                 {/* button */}
-                {Object.keys(user).length > 0 && user.userIsReady &&
+                {Object.keys(user).length > 0 && user.userIsReady && user.userId !== assets.userId &&
                     <div className="flex justify-center items-center mt-2">
                         <button className='h-[40px] py-1 w-[200px] mx-auto shadow-md bg-my-acct font-bold text-my-text flex justify-center items-center gap-1 hover:bg-my-btn-hover'><MdLocalOffer className="-translate-y-[1px]" />Make New Offer</button>
+                    </div>}
+                {user.userId == assets.userId &&
+                    <div className="flex justify-center text-xl font-bold">
+                        <p>...This is your asset...</p>
                     </div>}
                 {/* close button */}
                 <button className='w-[50px] h-[50px] bg-my-acct text-my-text rounded-full text-4xl font-bold absolute flex justify-center items-center top-0 right-0 translate-x-4 -translate-y-4 shadow-md hover:bg-my-btn-hover'

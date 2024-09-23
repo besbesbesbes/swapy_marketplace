@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { RiSwap2Line } from "react-icons/ri"
@@ -8,6 +8,7 @@ import { FaPhone, FaArrowAltCircleRight, FaArrowAltCircleLeft } from "react-icon
 import ShowLogin from './ShowLogin'
 import ShowContactUs from './ShowContactUs'
 import useAppStore from "../store/main-store"
+import axios from 'axios'
 const Header = () => {
     const navigate = useNavigate()
     const location = useLocation()
@@ -28,10 +29,48 @@ const Header = () => {
         token: state.token,
         setToken: state.setToken,
     }))
+    // -----------------------------------------------------------------------
+    const [inputValue, setInputValue] = useState('');
+    const [suggestions, setSuggestions] = useState([]);
+    const [assets, setAssets] = useState([])
+    const getAssets = async () => {
+        const resp = await axios.get("http://localhost:8000/search/all")
+        setAssets(resp.data.assets)
+    }
+    useEffect(() => {
+        getAssets()
+    }, [])
+    const handleChange = async (e) => {
+        const value = e.target.value;
+        const predefinedSuggestions = assets.map(el => el.assetName)
+        setInputValue(value);
+        if (value) {
+            const filteredSuggestions = predefinedSuggestions.filter(item =>
+                item.toLowerCase().includes(value.toLowerCase())
+            );
+            setSuggestions(filteredSuggestions);
+        } else {
+            setSuggestions([]);
+        }
+    };
+
+    const handleSuggestionClick = (suggestion) => {
+        setInputValue(suggestion);
+        setSuggestions([]);
+    };
+
+
+
+
+    // -----------------------------------------------------------------------
     const hdlLogout = () => {
         setToken("")
         setUser({})
         navigate('/')
+    }
+    const hdlChangeInput = (e) => {
+        setInput(e.target.value)
+        console.log(input)
     }
     const hdlSubmitSearch = (e) => {
         e.preventDefault()
@@ -72,11 +111,32 @@ const Header = () => {
                 </div>
                 <div className='flex justify-between items-end gap-20'>
                     {/* search input */}
-                    <form className='flex border border-my-text p-1 flex-1 bg-my-text  max-w-[600px] mb-2'
+                    <form className='flex border border-my-text p-1 flex-1 bg-my-text  max-w-[600px] mb-2 gap-1 relative'
                         onSubmit={hdlSubmitSearch}>
                         <input type="text" className='flex-1 text-my-prim px-2 bg-my-text'
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)} />
+                            // value={input}
+                            // onChange={hdlChangeInput} />
+                            value={inputValue}
+                            onChange={handleChange} />
+                        {/* -------------------------------------------------------------------------- */}
+                        {suggestions.length > 0 && (
+                            <ul className="absolute bg-white border mt-1 w-full left-0 max-h-60 overflow-auto z-10 text-my-prim translate-y-8">
+                                {suggestions.map((suggestion, index) => (
+                                    <li
+                                        key={index}
+                                        onClick={() => handleSuggestionClick(suggestion)}
+                                        className="p-2 cursor-pointer hover:bg-gray-200"
+                                    >
+                                        {suggestion}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+
+
+
+
+                        {/* -------------------------------------------------------------------------- */}
                         <button className='py-1 px-2 bg-my-acct flex justify-center items-center gap-1 hover:bg-my-btn-hover'> <FaSearch />Search</button>
                     </form>
                     {/* main menu */}
