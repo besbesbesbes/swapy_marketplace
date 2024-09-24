@@ -120,7 +120,7 @@ const Header = () => {
                             onChange={handleChange} />
                         {/* -------------------------------------------------------------------------- */}
                         {suggestions.length > 0 && (
-                            <ul className="absolute bg-white border mt-1 w-full left-0 max-h-60 overflow-auto z-10 text-my-prim translate-y-8">
+                            <ul className="absolute bg-white border mt-[1px] w-full left-0 max-h-60 overflow-auto z-10 text-my-prim translate-y-8">
                                 {suggestions.map((suggestion, index) => (
                                     <li
                                         key={index}
